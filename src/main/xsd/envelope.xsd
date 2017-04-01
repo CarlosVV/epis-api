@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="urn:mhub:xsd:Envelope:01" 
+	elementFormDefault="qualified"
+	xmlns:mhub="urn:mhub:xsd:Envelope:01"
+	xmlns:header="urn:iso:std:iso:20022:tech:xsd:head.001.001.01">
+	
+	<xs:import schemaLocation="head.001.001.01.xsd" namespace="urn:iso:std:iso:20022:tech:xsd:head.001.001.01" />
+	 
+	<xs:complexType name="BusinessMessage">
+		<xs:annotation>
+			<xs:documentation>The ISO 20022 Business Application Header must be included here.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element ref="header:AppHdr" minOccurs="1" maxOccurs="1" />
+			<xs:any processContents="skip" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="MHubHeader">
+		<xs:annotation>
+			<xs:documentation>This is only a technical header. This is not the ISO 20022 Business Application Header.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:any namespace="##any" processContents="lax" minOccurs="0"
+				maxOccurs="unbounded" />
+		</xs:sequence>
+		<xs:anyAttribute namespace="##any" processContents="lax" />
+	</xs:complexType>
+
+	<xs:complexType name="MHubEnvelope">
+		<xs:sequence>
+			<xs:element name="mhHdr" type="mhub:MHubHeader" minOccurs="0" maxOccurs="1" />
+			<xs:element name="BizMsg" type="mhub:BusinessMessage" minOccurs="1" maxOccurs="1" />
+		</xs:sequence>
+		<xs:anyAttribute namespace="##any" processContents="lax" />
+	</xs:complexType>
+
+	<xs:element name="Ex" type="mhub:MHubEnvelope" />
+</xs:schema>
